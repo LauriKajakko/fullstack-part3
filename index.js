@@ -62,6 +62,23 @@ app.post('/api/persons', (req, res) => {
     
     const body = req.body
 
+    if(!body.name || !body.number){
+        return res.status(400).json({
+            error: 'name or number missing'
+        })
+    }
+    
+    let exists = false
+    persons.forEach(person => {
+        if (person.name===body.name) exists=true
+    })
+
+    if(exists){
+        return res.status(400).json({
+            error: 'name already exists'
+        })
+    }
+
     const person = {
         
         id: id,
