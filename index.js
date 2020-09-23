@@ -6,17 +6,15 @@ const app2 = morgan()
 morgan('tiny')
 app.use(express.json())
 
-const requestLogger = morgan((tokens, req, res) => {
-    return [
-        tokens.method(req, res),
-        tokens.url(req, res),
-        tokens.status(req, res),
-        tokens.res(req, res, 'content-length'), '-',
-        tokens['response-time'](req, res), 'ms'
-      ].join(' ')
+morgan.token('postdata', (req, res) => {
+    if(req.method==='POST'){
+        return JSON.stringify(req.body)
+    } else {
+        return null
+    }
 })
 
-app.use(requestLogger)
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postdata'))
 
 let persons = [
     {
