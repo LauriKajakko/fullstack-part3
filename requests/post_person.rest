@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/persons
+POST https://fierce-wave-66268.herokuapp.com/api/persons
 Content-type: application/json
 
-{"name": "abcdeeeeefg", "number": "12345665655678"}
+{"name": "Warning: ", "number": "12345665655678"}
