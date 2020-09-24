@@ -2,9 +2,14 @@ const { response } = require('express')
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-const app2 = morgan()
-morgan('tiny')
+const cors = require('cors')
+app.use(cors())
 app.use(express.json())
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
 
 morgan.token('postdata', (req, res) => {
     if(req.method==='POST'){
@@ -112,7 +117,4 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-const PORT = 3001
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
+
