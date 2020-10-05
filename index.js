@@ -1,5 +1,6 @@
 
 require('dotenv').config()
+const bodyParser = require('body-parser')
 const { response } = require('express')
 const express = require('express')
 const app = express()
@@ -7,9 +8,10 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const Person = require('./models/person')
-app.use(cors())
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
+app.use(cors())
+app.use(bodyParser.json())
 
 
 
@@ -44,13 +46,12 @@ app.get('/', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
     Person.find({}).then(persons => {
-        res.json(persons)
+        res.json(persons.map(person => person.toJSON()))
     })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    Person.findById(id).then(person => {
+    Person.findById(req.params.id).then(person => {
         res.json(person)
     })
 }) 
@@ -95,14 +96,13 @@ app.post('/api/persons', (req, res) => {
     })
 
     person.save().then(savedPerson => {
-        res.json(savedPerson)
+        res.json(savedPerson.toJSON())
     })
 
     persons = persons.concat(person)
 
     console.log(person)
 
-    res.json(person)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
