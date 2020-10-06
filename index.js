@@ -107,6 +107,7 @@ app.post('/api/persons', (req, res) => {
     person.save().then(savedPerson => {
         res.json(savedPerson.toJSON())
     })
+    .catch(error => next(error))
 
     persons = persons.concat(person)
 
@@ -122,6 +123,21 @@ app.delete('/api/persons/:id', (req, res, next) => {
         .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (req, res, next) => {
+    const body = req.body
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(req.params.id, person, { new:true })
+        .then(updatedPerson => {
+            response.json(updatedPerson)
+        })
+        .catch(error => next(error))
+})
+
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
@@ -133,6 +149,11 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({error:  'unknown endpoint'})
+}
+
+app.use(unknownEndpoint)
 app.use(errorHandler)
 
 
