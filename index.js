@@ -74,7 +74,7 @@ app.get('/info', (req, res) => {
     
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const min = Math.ceil(1)
     const max = Math.floor(1000000)
     const id = Math.floor(Math.random() * (max - min + 1) + min)
@@ -144,7 +144,9 @@ const errorHandler = (error, request, response, next) => {
   
     if (error.name === 'CastError' && error.kind == 'ObjectId') {
       return response.status(400).send({ error: 'malformatted id' })
-    } 
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+    }
   
     next(error)
 }

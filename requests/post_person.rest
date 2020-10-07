@@ -1,4 +1,4 @@
 POST http://localhost:3001/api/persons
 Content-type: application/json
 
-{"name": "Warning: ", "number": "12345665655678"}
+{"name": "Wa", "number": "12000000000000000000"}
